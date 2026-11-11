@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: windows-2022
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and package
+        shell: powershell
+        run: ./build-release.ps1
+      - name: Check release tag
+        shell: powershell
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $version = [Diagnostics.FileVersionInfo]::GetVersionInfo((Resolve-Path 'dist/MeetingCapture.exe')).FileVersion
+          $expected = 'v' + (($version -split '\.')[0..2] -join '.')
+          if ($env:RELEASE_TAG -ne $expected) { throw "Tag must match EXE version: $expected" }
+      - name: Publish release assets
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $zip = Get-Item 'dist/MeetingCapture-*-windows-x64.zip'
+          gh release create $env:RELEASE_TAG 'dist/MeetingCapture.exe' $zip.FullName 'dist/SHA256SUMS.txt' --verify-tag --title "Meeting Capture $env:RELEASE_TAG" --notes-file 'docs/RELEASE_NOTES.md'
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub release creation failed.' }

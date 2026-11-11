@@ -1,0 +1,15 @@
+/dist/
+/artifacts/
+/work/
+/tmp/
+/qa*/
+.vs/
+bin/
+obj/
+*.log
+*.tmp
+*.user
+*.suo
+__pycache__/
+.DS_Store
+Thumbs.db

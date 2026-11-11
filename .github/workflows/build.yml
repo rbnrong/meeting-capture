@@ -1,0 +1,32 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and package
+        shell: powershell
+        run: ./build-release.ps1
+      - name: Upload portable build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: meeting-capture-windows-x64
+          path: |
+            dist/MeetingCapture.exe
+            dist/MeetingCapture-*-windows-x64.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7

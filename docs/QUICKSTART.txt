@@ -1,0 +1,32 @@
+Meeting Capture 1.1.0
+
+Windows 10/11 x64. No installer, Python, Office, or administrator access required.
+
+1. Extract the ZIP and open MeetingCapture.exe.
+2. Paste an existing output folder, or click Browse...
+   Straight quotes, smart quotes, and surrounding whitespace are removed.
+3. Select region..., drag a rectangle, and release to confirm.
+   Press Esc or right-click to cancel.
+4. Start session, then click Capture whenever you need a screenshot.
+5. Open folder shows saved PNGs. End session returns to setup.
+
+Move the toolbar using its handle, counter, or status line.
+Images go directly into the selected folder. Example:
+20261111_193025_123_0001.png
+
+The selected region stays at fixed screen coordinates. Moving the toolbar
+does not change it. If the display layout changes, end the session and
+select a new region. Hover over save errors to read the full explanation.
+
+Only successful saves increase the counter. Existing images are not overwritten.
+Capture briefly hides the toolbar and blocks repeated clicks at its old position.
+Opening the folder intentionally switches to Windows File Explorer.
+
+Settings: %LOCALAPPDATA%\MeetingCapture\last-folder.txt
+Screenshots and settings stay on your computer. The app makes no network requests.
+Native Windows dialogs follow the language of your Windows installation.
+
+Documentation, source, and updates:
+https://github.com/rbnrong/meeting-capture
+
+MIT License. Copyright (c) 2026 rbnrong.
